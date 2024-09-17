@@ -1,0 +1,129 @@
+{% extends 'employee/staff_master.html' %} {% block staff_content %}
+<div
+  class="container "
+>
+    <div class="row">
+
+            <div class="col-md-12">
+                <table class="table table-hover table-primary">
+                    <thead>
+                        <tr class="text-center">
+                            <th>SL NO</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Added By</th>
+                            <th>Date Added</th>
+                            <th>Status</th>
+                            <th>Pic</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for job in jobs %}
+                        <tr class="text-center">
+                            <td>{{forloop.counter}}</td>
+                            <td>{{ job.job.title }}</td>
+                            <td>{{ job.job.description }}</td>
+                            <td>{{ job.job.added_by.admin_name | title }}</td>
+                            <td>{{ job.assigned_date}}</td>
+                            <td>{{ job.status}}</td>
+                            <td>
+                                <a href="#" class="view-pic" data-bs-toggle="modal" data-bs-target="#imageModal" 
+                                   data-image-url="{{ job.job.pic.url }}">View Pic</a>
+                            </td>
+                
+                            {% if job.status == 'pending' %}
+                            <td><a href="#" data-bs-toggle="modal" data-assign_id = {{job.id}} data-bs-target="#rejectModal" onclick="getAssignId('{{job.id}}')"  class="btn btn-danger">reject</a></td>
+                            {% endif %}
+                
+                            <td><a class="btn btn-success" href="{% url 'staff:update_job_completed' job.id %}">Completed</a></td>
+                           
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+    </div>
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">Job Image</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="" alt="Job Image" class="img-fluid" />
+                </div>
+                <div class="modal-footer">
+                    <a id="downloadImageLink" href="" download class="btn btn-secondary"><i class=" fa fa-solid fa-download"></i></a>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" style="height: 34px;">X</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">Reject Reason</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <form method="POST" id="rejectForm">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label for="password" class="form-label text-dark py-2">Reason</label>
+                            <textarea class="form-control" name="reason"  ></textarea>
+                          </div>
+                          <div class="mb-4">
+                             
+                            <input type="submit" class="btn btn-danger"  id="">
+                            <input type="text" name="" id="assign_id_input">
+                          </div>
+                         
+                         
+                    </form>
+                </div>
+                 
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // JavaScript to load the image into the modal
+        document.addEventListener('DOMContentLoaded', function () {
+            const imageLinks = document.querySelectorAll('.view-pic');
+            
+            imageLinks.forEach(link => {
+                link.addEventListener('click', function () {
+                    const imageUrl = this.getAttribute('data-image-url');
+                    const modalImage = document.getElementById('modalImage');
+                    
+                    // Set the image source to the clicked image URL
+                    modalImage.src = imageUrl;
+                });
+            });
+        });
+        </script>
+
+
+<script>
+   
+   function getAssignId(id){
+    console.log(id,'aaaaooo')
+    document.getElementById('assign_id_input').value = `/reject/${id}/lkjjlk`
+    const form = document.getElementById('rejectForm');
+    // Set the form action URL dynamically, assuming you have a URL like `/reject/<job_id>/`
+    form.action = `/staff/pending/jobs/reject/${id}`;
+   }
+    </script>
+    
+    {% endblock %}
+
+
+ 

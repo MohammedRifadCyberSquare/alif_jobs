@@ -1,0 +1,82 @@
+{% extends 'job_admin/admin_master.html' %}
+
+{% block admin_content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+
+        
+        <table class="table table-hover table-primary">
+    <thead>
+        <tr class="text-center">
+            <th>SL No</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Added By</th>
+             
+            <th>Status</th>
+            <th></th>
+            <th></th>
+             
+        </tr>
+    </thead>
+    <tbody>
+    {% for job in jobs %}
+        <tr class="text-center">
+            <td>{{forloop.counter }}</td>
+            <td>{{ job.job.title }}</td>
+            <td>{{ job.job.description | capfirst }}</td>
+            <td>{{ job.job.added_by.admin_name | title }}</td>
+            <td>{{job.job.status|title}}</td>
+            
+            <td>
+                <a href="#" class="view-pic" data-bs-toggle="modal" data-bs-target="#detailsModal" 
+                   data-image-url="{{ job.job.pic.url }}">View Pic</a>
+            </td>
+             <td><a href="" class="btn btn-success">View Details</a></td>
+
+        </tr>
+        {% endfor %}  
+    </tbody>
+</table>
+</div>
+
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Job Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" alt="Job Image" class="img-fluid" />
+            </div>
+            <div class="modal-footer">
+                <a id="downloadImageLink" href="" download class="btn btn-secondary"><i class=" fa fa-solid fa-download"></i></a>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" style="height: 34px;">X</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</div>
+</div>
+
+<script>
+    // JavaScript to load the image into the modal
+    document.addEventListener('DOMContentLoaded', function () {
+        const imageLinks = document.querySelectorAll('.view-pic');
+        
+        imageLinks.forEach(link => {
+            link.addEventListener('click', function () {
+                const imageUrl = this.getAttribute('data-image-url');
+                const modalImage = document.getElementById('modalImage');
+                
+                // Set the image source to the clicked image URL
+                modalImage.src = imageUrl;
+            });
+        });
+    });
+    </script>
+{% endblock %}

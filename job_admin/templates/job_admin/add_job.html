@@ -1,0 +1,55 @@
+{% extends 'job_admin/admin_master.html' %}
+
+{% block admin_content %}
+<div class="container d-flex justify-content-center " style="min-height: 100vh;">
+    <div class="col-md-6">
+        <div class="card-body">
+            <h3 class="text-center py-3" style="font-weight: bolder;">Add Job</h3>
+             
+            {% if message %}
+           <div class="alert  mt-3"  style="background-color: #EE4266;color: white;" id="error-msg" role="alert">
+            {{ message }}
+          </div>
+          {% endif %}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="mb-1">
+            <label for="title" class="form-label text-dark py-2">Job Title</label>
+            <input type="text" class="form-control" name="title" id="title">
+        </div>
+        <div class="mb-1">
+            <label for="description" class="form-label text-dark py-2">Description:</label>
+            <textarea name="description" class="form-control" id="description"></textarea> 
+        </div>
+        <div class="mb-1">
+            <label for="description" class="form-label text-dark py-2">Photo (optional)</label>
+            <input type="file" class="form-control" name="pic" id="">
+        </div>
+        <div class="mb-1">
+            <label for="description" class="form-label text-dark py-2">Assign to:</label>
+            <select name="staff" id="" class="form-control">
+                <option value="" disabled selected>Select Staff</option>
+                {% for staff in staffs %}
+                    <option value="{{staff.id}}">{{ staff.emp_name | title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-1">
+            <input type="submit" class="btn btn-primary"  id="">
+        </div>
+        
+         
+         
+    </form>
+    <script>
+        setTimeout(function() {
+           var errorMsg = document.getElementById('error-msg');
+           if (errorMsg) {
+              errorMsg.style.display = 'none';
+           }
+        }, 2000); // 5000 milliseconds = 5 seconds
+     </script>
+</div>
+{% endblock %}

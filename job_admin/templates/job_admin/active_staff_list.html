@@ -1,0 +1,24 @@
+{% extends 'job_admin/admin_master.html' %} {% block admin_content %}
+<div
+  class="container "
+>
+    <div class="row">
+        {% for staff in staffs %}
+        <div class="col-md-3 col-lg-4">
+            
+            <div class="card" style="width: 18rem;">
+                <img src="{{ staff.pic.url}}" class="card-img-top" style="max-height: 150px;min-height: 150px; max-width: 300px;min-width: 300px;" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">{{staff.emp_name | title }}</h5>
+                  <p class="card-text  text-bold">{{staff.type | title}}</p>
+                  <p class="card-text text-bold " >Status: <span class="text-success">{{staff.staff_status | title}}</span></p>
+
+                  <a href="#" class="btn btn-primary">Remove</a>
+                </div>
+              </div>
+              
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

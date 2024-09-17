@@ -1,0 +1,36 @@
+{% extends 'job_admin/admin_master.html' %}
+
+{% block admin_content %}
+<div class="row">
+    <div class="col-md-12">
+        <!-- Use table-responsive to make the table scroll horizontally on small devices -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-primary table-hover table-striped">
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th>SL No.</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Added By</th>
+                        <th>Current Assignee</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    {% for job in jobs %}
+                    <tr>
+                         
+                        <td>{{forloop.counter }}</td>
+                        <td>{{ job.title | title }}</td>
+                        <td>{{ job.description | capfirst }}</td>
+                        <td>{{ job.added_by.admin_name | title }}</td>
+                        <td>{{ job.current_assignee|default:"Not assigned"|title }}</td>
+                        <td>{{ job.current_assignee_status|default:"N/A" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
