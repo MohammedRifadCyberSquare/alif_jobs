@@ -1,0 +1,43 @@
+server {
+    listen 80;
+    server_name your_domain.com;  # Replace with your domain or IP address
+
+    # Root directory
+    root /path/to/your/project;   # Replace with the path to your Django project
+
+    # Index file
+    index index.html;
+
+    # Serve static files
+    location /static/ {
+        alias /path/to/your/staticfiles/;  # Replace with your STATIC_ROOT directory
+    }
+
+    # Serve media files (if applicable)
+    location /media/ {
+        alias /path/to/your/mediafiles/;  # Replace with your MEDIA_ROOT directory
+    }
+
+    # Proxy requests to Gunicorn
+    location / {
+        proxy_pass http://127.0.0.1:8000;  # Replace with your Gunicorn server address and port
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Optional: Handle 404 errors
+    error_page 404 /404.html;
+    location = /404.html {
+        root /path/to/your/project;  # Adjust the path if necessary
+        internal;
+    }
+
+    # Optional: Handle 500 errors
+    error_page 500 502 503 504 /500.html;
+    location = /500.html {
+        root /path/to/your/project;  # Adjust the path if necessary
+        internal;
+    }
+}
